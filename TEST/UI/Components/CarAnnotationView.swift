@@ -15,36 +15,44 @@ class CarAnnotationView: MKAnnotationView {
             guard let carAnnotation = newValue as? CarAnnotation else { return }
             canShowCallout = true
             calloutOffset = CGPoint(x: -5, y: 5)
-            
-            let imageView = UIImageView(frame: CGRect(origin: CGPoint.zero,
-                                                      size: CGSize(width: 50, height: 50)))
-            imageView.contentMode = .scaleAspectFit
-            imageView.load(by: carAnnotation.vehicleModel.imgUrl)
-            leftCalloutAccessoryView = imageView
-            
+
+            //pin marker
             image = UIImage(named: carAnnotation.pinImageName)?.withRenderingMode(.alwaysTemplate)
             
-            let detailLabel = UILabel(frame: <#T##CGRect#>)
-            detailLabel.numberOfLines = 0
-            detailLabel.font = detailLabel.font.withSize(14)
-            detailLabel.text = carAnnotation.subtitle
-            detailCalloutAccessoryView = detailLabel
-            carAnnotation.requestForGeoCoding {[detailLabel] address in
-                DispatchQueue.main.async { [weak self] in
-                    detailLabel.text = address
-                    self?.setNeedsLayout()
-                }
-            }
-
-            let button = UIButton(frame: CGRect(origin: CGPoint.zero, size: CGSize(width: 50, height: 50)))
-            let attTitle = NSAttributedString(string: "Route", attributes: [NSAttributedStringKey.font : UIFont.systemFont(ofSize: 12)])
-            button.setAttributedTitle(attTitle, for: .normal)
-            button.backgroundColor = UIColor(fromHex: carAnnotation.vehicleModel.color)
-            rightCalloutAccessoryView = button
+            leftCalloutAccessoryView = initializeCarImage(carAnnotation)
+            detailCalloutAccessoryView = initializeAddressReverseGeocoding(carAnnotation)
+            rightCalloutAccessoryView = initializeButtonRoute(carAnnotation)
         }
     }
-}
-
-extension UILabel {
     
+    private func initializeCarImage (_ annotation: CarAnnotation) -> UIView {
+        let imageView = UIImageView(frame: CGRect(origin: CGPoint.zero,
+        size: CGSize(width: 50, height: 50)))
+        imageView.contentMode = .scaleAspectFit
+        imageView.load(by: annotation.vehicleModel.imgUrl)
+        return imageView
+    }
+    
+    private func initializeButtonRoute (_ annotation: CarAnnotation) -> UIView {
+        let button = UIButton(frame: CGRect(origin: CGPoint.zero, size: CGSize(width: 50, height: 50)))
+        let attTitle = NSAttributedString(string: "Route", attributes: [NSAttributedStringKey.font : UIFont.systemFont(ofSize: 12)])
+        button.setAttributedTitle(attTitle, for: .normal)
+        button.backgroundColor = UIColor(fromHex: annotation.vehicleModel.color)
+        return button
+    }
+    
+    private func initializeAddressReverseGeocoding (_ annotation: CarAnnotation) -> UIView {
+        let detailLabel = UILabel()
+        detailLabel.numberOfLines = 0
+        detailLabel.font = detailLabel.font.withSize(14)
+        detailLabel.text = annotation.subtitle
+        
+        annotation.requestForGeoCoding {[detailLabel] address in
+            DispatchQueue.main.async {
+                detailLabel.text = address
+                detailLabel.setNeedsLayout()
+            }
+        }
+        return detailLabel
+    }
 }
