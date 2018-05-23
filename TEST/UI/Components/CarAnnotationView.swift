@@ -51,6 +51,7 @@ class CarAnnotationView: MKAnnotationView {
             DispatchQueue.main.async {
                 detailLabel.text = address
                 detailLabel.setNeedsLayout()
+                detailLabel.setNeedsDisplay()
             }
         }
         return detailLabel

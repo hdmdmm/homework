@@ -33,7 +33,7 @@ class GeoDetailsViewController: UIViewController {
     private func setupMapView() {
         mapView.showsUserLocation = true
         mapView.showsScale = true
-        mapView.register(CarAnnotationView.self, forAnnotationViewWithReuseIdentifier: MKMapViewDefaultAnnotationViewReuseIdentifier)
+        mapView.register(CarAnnotationView.self, forAnnotationViewWithReuseIdentifier: "CarAnnotationView")
     }
 
     private func setupLocationManager() {
@@ -75,21 +75,31 @@ class GeoDetailsViewController: UIViewController {
     }
 
     private func updateMarkersOnMap(_ params: [GeoParams]) {
-        log.debug("Ready to update Markers on the map")
-
-        let fromNewParams = Set<CarAnnotation> (params.compactMap { CarAnnotation(userData: userModel, geoParams: $0) })
         
+        //add markers if empty
         if annotations.value.isEmpty {
+            let fromNewParams = Set<CarAnnotation> (params.compactMap {
+                CarAnnotation(userData: userModel, geoParams: $0)
+            })
             annotations.accept(fromNewParams)
             mapView.addAnnotations([CarAnnotation](fromNewParams))
             return
         }
+
         //update parameters in annotations
-        annotations.value.forEach { annotation in
-            guard let geoParams = params.first(where: {$0 == annotation.geoParams}) else {
-                return
+        DispatchQueue.main.async {
+            self.annotations.value.forEach { annotation in
+                guard let geoParams = params.first(where: {$0 == annotation.geoParams}) else {
+                    return
+                }
+                annotation.geoParams = geoParams
+                let view = self.mapView.view(for: annotation)
+                view?.annotation = annotation
+
+                //tricky way to update markers on map.
+                let center = self.mapView.centerCoordinate
+                self.mapView.centerCoordinate = center
             }
-            annotation.geoParams = geoParams
         }
         
 //        DispatchQueue.main.async {
@@ -132,6 +142,22 @@ class GeoDetailsViewController: UIViewController {
 }
 
 extension GeoDetailsViewController: MKMapViewDelegate {
+
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        if annotation is MKUserLocation {
+            return nil
+        }
+
+        let id = "CarAnnotationView"
+        guard let view = mapView.dequeueReusableAnnotationView(withIdentifier: id) else {
+            let view = CarAnnotationView(annotation: annotation, reuseIdentifier: id)
+            view.annotation = annotation
+            return view
+        }
+        view.annotation = annotation
+        return view
+    }
+
     func mapView(_ mapView: MKMapView,
                  annotationView view: MKAnnotationView,
                  calloutAccessoryControlTapped control: UIControl) {

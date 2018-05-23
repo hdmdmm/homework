@@ -9,6 +9,7 @@
 import UIKit
 import MapKit
 import Contacts
+import RxSwift
 
 class CarAnnotation: NSObject, MKAnnotation {
     var coordinate: CLLocationCoordinate2D
@@ -33,7 +34,7 @@ class CarAnnotation: NSObject, MKAnnotation {
     var geoParams: GeoParams? {
         didSet {
             guard let geoParams = geoParams else {
-                    return
+                return
             }
 			coordinate = CLLocationCoordinate2D(latitude: geoParams.lat, longitude: geoParams.lon)
 //            requestForGeoCoding()
