@@ -16,7 +16,7 @@ class UserListCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
-        // might be initialized fonts, color of fonts styles.
+        // might be initialized fonts, color and styles.
     }
     
     func configure(with ownerData: OwnerModel?) {

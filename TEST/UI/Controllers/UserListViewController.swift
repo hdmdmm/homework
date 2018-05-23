@@ -74,22 +74,6 @@ class UserListViewController: UITableViewController {
         }
         self.list.accept(list)
     }
-    
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        switch identifierForSegue(segue: segue) {
-//        case .ShowGeoDetails:
-//            guard let vc = segue.destination as? GeoDetailsViewController else {
-//                fatalError("Didn't resolve GeoDetailsViewController")
-//            }
-//            vc.userModel = self.selectedModel
-//            break
-//        }
-//    }
 }
-//extension UserListViewController: SegueHandler {
-//    enum SegueIdentifier: String {
-//        case ShowGeoDetails
-//    }
-//}
 
 extension UserListViewController: Message{}
