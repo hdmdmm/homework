@@ -5,4 +5,8 @@ Test assignment for tracking users and building routes to them. The goal is to g
 
 3rd party frameworks I choosed (managed by Cocoapods):
 
-Moya, RxSwift, RxCocoa, SwiftyBeaver
+Realm;
+Moya;
+RxSwift;
+RxCocoa;
+SwiftyBeaver;

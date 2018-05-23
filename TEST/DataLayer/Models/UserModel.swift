@@ -7,24 +7,36 @@
 //
 
 import UIKit
-struct OwnerModel: Codable {
-    var name: String?
-    var surname: String?
-    var imgUrl: String?
+import RealmSwift
+
+class OwnerModel: Object, Decodable {
+    @objc dynamic var name: String?
+    @objc dynamic var surname: String?
+    @objc dynamic var imgUrl: String?
+
+	override static func primaryKey() -> String? {
+		return "surname"
+	}
+
     private enum CodingKeys: String, CodingKey {
         case imgUrl = "foto"
         case name, surname
     }
 }
 
-struct VehicleModel: Codable {
-    var vehicleID: Int?
-    var make: String?
-    var model: String?
-    var year: String?
-    var color: String?
-    var vin: String?
-    var imgUrl: String?
+class VehicleModel: Object, Decodable {
+    @objc dynamic var vehicleID: Int = 0
+    @objc dynamic var make: String?
+    @objc dynamic var model: String?
+    @objc dynamic var year: String?
+    @objc dynamic var color: String?
+    @objc dynamic var vin: String?
+    @objc dynamic var imgUrl: String?
+
+	override static func primaryKey() -> String? {
+		return "vehicleID"
+	}
+
     private enum CodingKeys: String, CodingKey {
         case vehicleID = "vehicleid"
         case imgUrl = "foto"
@@ -32,40 +44,57 @@ struct VehicleModel: Codable {
     }
 }
 
-struct UserModel: Codable, Hashable {
-    var userID: Int?
-    var owner: OwnerModel?
-    var vehicles: [VehicleModel]?
+class UserModel: Object, Decodable {
+    @objc dynamic var userID: Int = 0
+	@objc dynamic var owner: OwnerModel?
+	var vehicles = List<VehicleModel>()
+
+	override static func primaryKey() -> String? {
+		return "userID"
+	}
 
     private enum CodingKeys: String, CodingKey {
         case userID = "userid"
         case owner, vehicles
     }
 
-    var hashValue: Int {
-        guard let hashValue = userID?.hashValue else {
-            log.error("Returned wrong hash value. userID value not initialized")
-            return -1
-        }
-        return hashValue
-    }
+	required convenience init(from decoder: Decoder) throws {
+		self.init()
+		let container = try decoder.container(keyedBy: CodingKeys.self)
+		userID = try container.decode(Int.self, forKey: .userID)
+		owner = try container.decode(OwnerModel.self, forKey: .owner)
+		let vehiclesArray = try container.decode([VehicleModel].self, forKey: .vehicles)
+		vehiclesArray.forEach{ vehicles.append($0) }
+	}
 
-    static func == (lhs: UserModel, rhs: UserModel) -> Bool {
-        return lhs.userID == rhs.userID
-    }
+//    override var hashValue: Int {
+//        guard let hashValue = userID?.hashValue else {
+//            log.error("Returned wrong hash value. userID value not initialized")
+//            return -1
+//        }
+//        return hashValue
+//    }
+//
+//    static func == (lhs: UserModel, rhs: UserModel) -> Bool {
+//        return lhs.userID == rhs.userID
+//    }
 }
 
-struct GeoParams: Codable, Hashable {
-    var vehicleid: Int?
-    var lat: Double?
-    var lon: Double?
+class GeoParams: Object, Decodable {
+    @objc dynamic var vehicleid: Int = 0
+    @objc dynamic var lat: Double = 0.0
+    @objc dynamic var lon: Double = 0.0
 
-    var hashValue: Int {
-        return vehicleid?.hashValue ?? 0
-    }
+	override static func primaryKey() -> String? {
+		return "vehicleid"
+	}
 
-    static func == (lhs: GeoParams, rhs: GeoParams) -> Bool {
-        return lhs.vehicleid == rhs.vehicleid
-    }
+//    var hashValue: Int {
+//        return vehicleid?.hashValue ?? 0
+//    }
+//
+//    static func == (lhs: GeoParams, rhs: GeoParams) -> Bool {
+//        return lhs.vehicleid == rhs.vehicleid
+//    }
 }
 

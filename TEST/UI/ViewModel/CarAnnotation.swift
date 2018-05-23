@@ -20,8 +20,7 @@ class CarAnnotation: NSObject, MKAnnotation {
     
     init?(userData: UserModel?, geoParams: GeoParams?) {
         guard let geoParams = geoParams,
-            let vehicleid = geoParams.vehicleid,
-            let vehicleModel = userData?.vehicles?.first(where: { $0.vehicleID == vehicleid } )
+			let vehicleModel = userData?.vehicles.first(where: { $0.vehicleID == geoParams.vehicleid } )
         else {
             return nil
         }
@@ -33,13 +32,11 @@ class CarAnnotation: NSObject, MKAnnotation {
     
     var geoParams: GeoParams? {
         didSet {
-            guard let geoParams = geoParams,
-                let longitude = geoParams.lon,
-                let latitude = geoParams.lat else {
+            guard let geoParams = geoParams else {
                     return
             }
-            coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
-            requestForGeoCoding()
+			coordinate = CLLocationCoordinate2D(latitude: geoParams.lat, longitude: geoParams.lon)
+//            requestForGeoCoding()
         }
     }
     
@@ -56,7 +53,7 @@ class CarAnnotation: NSObject, MKAnnotation {
         return mapItem
     }
     
-    private func requestForGeoCoding() {
+    func requestForGeoCoding(_ completion: ((_ address: String?) -> Void)? = nil) {
         let location = CLLocation(latitude: self.coordinate.latitude,
                                   longitude: self.coordinate.longitude)
         geoLayer.getLocationAddress(location: location) { [weak self] address, error in
@@ -66,6 +63,7 @@ class CarAnnotation: NSObject, MKAnnotation {
             }
             self?.subtitle = address
             print(address ?? "")
+            completion?(address)
         }
     }
 }

@@ -54,7 +54,7 @@ class GeoDetailsViewController: UIViewController {
     }
 
     private func udpateVehicleGeolocation() {
-        let completion: (Set<GeoParams>?, Error?) -> Swift.Void = { [weak self] params, error in
+        let completion: ([GeoParams]?, Error?) -> Swift.Void = { [weak self] params, error in
             if error != nil {
                 self?.showError(error)
                 return
@@ -74,10 +74,11 @@ class GeoDetailsViewController: UIViewController {
         self.updateMarkersOnMap(params)
     }
 
-    private func updateMarkersOnMap(_ params: Set<GeoParams>) {
+    private func updateMarkersOnMap(_ params: [GeoParams]) {
         log.debug("Ready to update Markers on the map")
 
         let fromNewParams = Set<CarAnnotation> (params.compactMap { CarAnnotation(userData: userModel, geoParams: $0) })
+        
         if annotations.value.isEmpty {
             annotations.accept(fromNewParams)
             mapView.addAnnotations([CarAnnotation](fromNewParams))
@@ -90,6 +91,10 @@ class GeoDetailsViewController: UIViewController {
             }
             annotation.geoParams = geoParams
         }
+        
+//        DispatchQueue.main.async {
+//            self.mapView.showAnnotations([CarAnnotation](self.annotations.value), animated: true)
+//        }
         
         //do merge
 //        let toAdd = fromNewParams.intersection(annotations.value)

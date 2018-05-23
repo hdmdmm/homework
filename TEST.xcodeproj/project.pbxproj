@@ -256,7 +256,7 @@
 				979954DA20B29FA800DF5364 /* Frameworks */,
 				979954DB20B29FA800DF5364 /* Resources */,
 				C60ACC231369D26C11D63834 /* [CP] Embed Pods Frameworks */,
-				38A4406E3438D36B93B35ECD /* [CP] Copy Pods Resources */,
+				60A61EB6F8BD1A6C87492309 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -316,7 +316,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		38A4406E3438D36B93B35ECD /* [CP] Copy Pods Resources */ = {
+		60A61EB6F8BD1A6C87492309 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -340,6 +340,8 @@
 				"${SRCROOT}/Pods/Target Support Files/Pods-TEST/Pods-TEST-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/Moya/Moya.framework",
+				"${BUILT_PRODUCTS_DIR}/Realm/Realm.framework",
+				"${BUILT_PRODUCTS_DIR}/RealmSwift/RealmSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/Result/Result.framework",
 				"${BUILT_PRODUCTS_DIR}/RxCocoa/RxCocoa.framework",
 				"${BUILT_PRODUCTS_DIR}/RxMKMapView/RxMKMapView.framework",
@@ -350,6 +352,8 @@
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Moya.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Realm.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RealmSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Result.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxCocoa.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxMKMapView.framework",

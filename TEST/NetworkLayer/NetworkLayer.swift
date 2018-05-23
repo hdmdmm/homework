@@ -35,13 +35,15 @@ final class NetworkLayer {
         provider = MoyaProvider<API>()//(plugins: [tokenPlugin])
     }
     
-    func users( completion: @escaping ((Set<UserModel>?, Error?) -> Swift.Void)) {
+    func users( completion: @escaping (([UserModel]?, Error?) -> Swift.Void)) {
         provider.request(.list) { result in
             switch result {
             case .success(let response):
                 do {
-                    let models: Set<UserModel>? = try self.mapData(data: response.data, dataKey: "data")
-                    completion(models, nil)
+					if let models: [UserModel] = try self.mapData(data: response.data, dataKey: "data") {
+						print(models)
+						completion(models, nil)
+					}
                 }
                 catch (let error) {
                     completion(nil, error)
@@ -55,7 +57,7 @@ final class NetworkLayer {
         }
     }
     
-    func vehicleLocations( userid: Int?, completion: @escaping ((Set<GeoParams>?, Error?) -> Swift.Void)) {
+    func vehicleLocations( userid: Int?, completion: @escaping (([GeoParams]?, Error?) -> Swift.Void)) {
         guard let userid = userid else {
             log.error("Wrong input parameter userid")
             completion(nil, NetworkLayerErrors.invalidArgument.error)
@@ -66,9 +68,10 @@ final class NetworkLayer {
             switch result {
             case .success(let response):
                 do {
-                    let models: Set<GeoParams>? = try self.mapData(data: response.data, dataKey: "data")
-                    print(models ?? "")
-                    completion(models, nil)
+					if let models: [GeoParams] = try self.mapData(data: response.data, dataKey: "data") {
+						print(models)
+						completion(models, nil)
+					}
                 }
                 catch (let error) {
                     completion(nil, error)
@@ -81,7 +84,7 @@ final class NetworkLayer {
         }
     }
     
-    private func mapData<T>(data: Data, dataKey: String) throws -> Set<T>? where T: Codable {
+    private func mapData<T>(data: Data, dataKey: String) throws -> [T]? where T: Decodable {
         let json = try? JSONSerialization.jsonObject(with: data, options: [])
         guard let dictionary = json as? [String: Any],
             let data = dictionary[dataKey] as? [[String: Any]] else {
@@ -91,6 +94,6 @@ final class NetworkLayer {
         guard let jsonData = try? JSONSerialization.data(withJSONObject: filtered, options: []) else {
             throw NetworkLayerErrors.json.error
         }
-        return try? JSONDecoder().decode(Set<T>.self, from: jsonData)
+        return try? JSONDecoder().decode([T].self, from: jsonData)
     }
 }
