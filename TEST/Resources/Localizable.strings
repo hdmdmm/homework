@@ -1,0 +1,17 @@
+/* 
+  Localizable.strings
+  TEST
+
+  Created by Dmitry Khotyanovich on 5/22/18.
+  Copyright © 2018 OCSICO. All rights reserved.
+*/
+
+//Application
+"app_ok" = "OK";
+"app_error" = "Error";
+"app_cancel" = "Cancel";
+//Errors
+"msg_error_generic" = "Ups, smth happend will figure out.";
+"msg_error_argument" = "Invalid argument.";
+"msg_error_json" = "Wrong json. Couldn't parse";
+"msg_error_geocoding" = "Didn't get placemarks from response.";
