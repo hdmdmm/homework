@@ -75,7 +75,14 @@ class GeoDetailsViewController: UIViewController {
     }
 
     private func updateMarkersOnMap(_ params: [GeoParams]) {
-        
+//        DispatchQueue.main.async { [unowned self] in
+//            self.mapView.removeAnnotations(self.mapView.annotations)
+//            self.mapView.addAnnotations(params.compactMap {
+//                CarAnnotation(userData: self.userModel, geoParams: $0)
+//            })
+//            let center = self.mapView.centerCoordinate
+//            self.mapView.centerCoordinate = center
+//        }
         //add markers if empty
         if annotations.value.isEmpty {
             let fromNewParams = Set<CarAnnotation> (params.compactMap {
@@ -136,7 +143,6 @@ class GeoDetailsViewController: UIViewController {
     private func showRoute(_ response: MKDirectionsResponse) {
         response.routes.forEach { route in
             mapView.add(route.polyline, level: MKOverlayLevel.aboveRoads)
-            //            route.steps.forEach { print ($0.instructions) }
         }
     }
 }
@@ -150,9 +156,7 @@ extension GeoDetailsViewController: MKMapViewDelegate {
 
         let id = "CarAnnotationView"
         guard let view = mapView.dequeueReusableAnnotationView(withIdentifier: id) else {
-            let view = CarAnnotationView(annotation: annotation, reuseIdentifier: id)
-            view.annotation = annotation
-            return view
+            return CarAnnotationView(annotation: annotation, reuseIdentifier: id)
         }
         view.annotation = annotation
         return view
