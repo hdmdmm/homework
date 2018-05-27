@@ -47,11 +47,9 @@ class CarAnnotationView: MKAnnotationView {
         detailLabel.font = detailLabel.font.withSize(14)
         detailLabel.text = annotation.subtitle
         
-        annotation.requestForGeoCoding {[detailLabel] address in
+        annotation.requestForGeoCoding {[weak self] address in
             DispatchQueue.main.async {
-                detailLabel.text = address
-                detailLabel.setNeedsLayout()
-                detailLabel.setNeedsDisplay()
+                (self?.detailCalloutAccessoryView as? UILabel)?.text = address
             }
         }
         return detailLabel

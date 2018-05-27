@@ -21,25 +21,24 @@ class CarAnnotation: NSObject, MKAnnotation {
     
     init?(userData: UserModel?, geoParams: GeoParams?) {
         guard let geoParams = geoParams,
-			let vehicleModel = userData?.vehicles.first(where: { $0.vehicleID == geoParams.vehicleid } )
-        else {
+			let vehicleModel = userData?.vehicles.first(where: { $0.vehicleID == geoParams.vehicleid } ) else {
             return nil
         }
         title = vehicleModel.model
-        coordinate = CLLocationCoordinate2D(latitude: 0, longitude: 0) //trick
-        self.geoParams = geoParams
+        coordinate = CLLocationCoordinate2D(latitude: geoParams.lat, longitude: geoParams.lon) //trick
+//        self.geoParams = geoParams
         self.vehicleModel = vehicleModel
     }
     
-    var geoParams: GeoParams? {
-        didSet {
-            guard let geoParams = geoParams else {
-                return
-            }
-			coordinate = CLLocationCoordinate2D(latitude: geoParams.lat, longitude: geoParams.lon)
-//            requestForGeoCoding()
-        }
-    }
+//    var geoParams: GeoParams? {
+//        didSet {
+//            guard let geoParams = geoParams else {
+//                return
+//            }
+//            coordinate = CLLocationCoordinate2D(latitude: geoParams.lat, longitude: geoParams.lon)
+////            requestForGeoCoding()
+//        }
+//    }
     
     var pinImageName: String {
         return "CarPin"

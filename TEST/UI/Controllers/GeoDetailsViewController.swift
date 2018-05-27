@@ -24,7 +24,7 @@ class GeoDetailsViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupLocationManager()
+//        setupLocationManager()
         setupMapView()
         setupCarGeolocationUpdater()
         udpateVehicleGeolocation()
@@ -36,14 +36,14 @@ class GeoDetailsViewController: UIViewController {
         mapView.register(CarAnnotationView.self, forAnnotationViewWithReuseIdentifier: "CarAnnotationView")
     }
 
-    private func setupLocationManager() {
-        locationManager.delegate = self
-        locationManager.requestWhenInUseAuthorization()
-        if CLLocationManager.locationServicesEnabled() {
-            locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
-            locationManager.requestLocation()
-        }
-    }
+//    private func setupLocationManager() {
+//        locationManager.delegate = self
+//        locationManager.requestWhenInUseAuthorization()
+//        if CLLocationManager.locationServicesEnabled() {
+//            locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
+//            locationManager.requestLocation()
+//        }
+//    }
     
     private func setupCarGeolocationUpdater() {
         Observable<Int>.interval(30, scheduler: MainScheduler.instance)
@@ -96,12 +96,16 @@ class GeoDetailsViewController: UIViewController {
         //update parameters in annotations
         DispatchQueue.main.async {
             self.annotations.value.forEach { annotation in
-                guard let geoParams = params.first(where: {$0 == annotation.geoParams}) else {
+                guard let geoParams = params.first(where: { $0.vehicleid == annotation.vehicleModel.vehicleID }) else {
                     return
                 }
-                annotation.geoParams = geoParams
-                let view = self.mapView.view(for: annotation)
-                view?.annotation = annotation
+//                annotation.geoParams = geoParams
+                if annotation.coordinate == CLLocationCoordinate2D(latitude: geoParams.lat, longitude: geoParams.lon) {
+                    print("the coordinates where not changed.")
+                    return
+                }
+                annotation.coordinate = CLLocationCoordinate2D(latitude: geoParams.lat, longitude: geoParams.lon)
+                self.mapView.view(for: annotation)?.annotation = annotation
 
                 //tricky way to update markers on map.
                 let center = self.mapView.centerCoordinate
@@ -179,18 +183,28 @@ extension GeoDetailsViewController: MKMapViewDelegate {
     }
 }
 
-extension GeoDetailsViewController: CLLocationManagerDelegate {
-    func locationManager(_ manager: CLLocationManager,
-                         didUpdateLocations locations: [CLLocation]) {
-        guard let location = locations.first else {
-            return
-        }
-        mapView.setCenter(location.coordinate, animated: true)
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print(error)
-    }
-}
+//extension GeoDetailsViewController: CLLocationManagerDelegate {
+//    func locationManager(_ manager: CLLocationManager,
+//                         didUpdateLocations locations: [CLLocation]) {
+//        guard let location = locations.first else {
+//            return
+//        }
+//        mapView.setCenter(location.coordinate, animated: true)
+//    }
+//
+//    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+//        print(error)
+//    }
+//}
 
 extension GeoDetailsViewController: Message {}
+
+extension CLLocationCoordinate2D: Hashable {
+    public var hashValue: Int {
+        return self.latitude.hashValue ^ self.longitude.hashValue
+    }
+    public static func == (lhs: CLLocationCoordinate2D, rhs: CLLocationCoordinate2D) -> Bool {
+        return (lhs.latitude == rhs.latitude) && (lhs.longitude == rhs.longitude)
+    }
+    
+}
