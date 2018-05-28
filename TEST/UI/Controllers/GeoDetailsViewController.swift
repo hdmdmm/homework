@@ -75,43 +75,45 @@ class GeoDetailsViewController: UIViewController {
     }
 
     private func updateMarkersOnMap(_ params: [GeoParams]) {
-//        DispatchQueue.main.async { [unowned self] in
-//            self.mapView.removeAnnotations(self.mapView.annotations)
-//            self.mapView.addAnnotations(params.compactMap {
-//                CarAnnotation(userData: self.userModel, geoParams: $0)
-//            })
+        DispatchQueue.main.async { [unowned self] in
+            self.mapView.removeAnnotations(self.mapView.annotations)
+            let annotations = params.compactMap {
+                CarAnnotation(userData: self.userModel, geoParams: $0)
+            }
+            self.mapView.addAnnotations(annotations)
 //            let center = self.mapView.centerCoordinate
 //            self.mapView.centerCoordinate = center
+        }
+//        //add markers if empty
+//        if annotations.value.isEmpty {
+//            let fromNewParams = Set<CarAnnotation> (params.compactMap {
+//                CarAnnotation(userData: userModel, geoParams: $0)
+//            })
+//            annotations.accept(fromNewParams)
+//            mapView.addAnnotations([CarAnnotation](fromNewParams))
+//            return
 //        }
-        //add markers if empty
-        if annotations.value.isEmpty {
-            let fromNewParams = Set<CarAnnotation> (params.compactMap {
-                CarAnnotation(userData: userModel, geoParams: $0)
-            })
-            annotations.accept(fromNewParams)
-            mapView.addAnnotations([CarAnnotation](fromNewParams))
-            return
-        }
-
-        //update parameters in annotations
-        DispatchQueue.main.async {
-            self.annotations.value.forEach { annotation in
-                guard let geoParams = params.first(where: { $0.vehicleid == annotation.vehicleModel.vehicleID }) else {
-                    return
-                }
-//                annotation.geoParams = geoParams
-                if annotation.coordinate == CLLocationCoordinate2D(latitude: geoParams.lat, longitude: geoParams.lon) {
-                    print("the coordinates where not changed.")
-                    return
-                }
-                annotation.coordinate = CLLocationCoordinate2D(latitude: geoParams.lat, longitude: geoParams.lon)
-                self.mapView.view(for: annotation)?.annotation = annotation
-
-                //tricky way to update markers on map.
-                let center = self.mapView.centerCoordinate
-                self.mapView.centerCoordinate = center
-            }
-        }
+//
+//        //update parameters in annotations
+//        DispatchQueue.main.async {
+//            self.annotations.value.forEach { annotation in
+//                guard let geoParams = params.first(where: { $0.vehicleid == annotation.vehicleModel.vehicleID }) else {
+//                    return
+//                }
+////                annotation.geoParams = geoParams
+//                if annotation.coordinate == CLLocationCoordinate2D(latitude: geoParams.lat, longitude: geoParams.lon) {
+//                    print("the coordinates where not changed.")
+//                    return
+//                }
+//                annotation.coordinate = CLLocationCoordinate2D(latitude: geoParams.lat, longitude: geoParams.lon)
+//                self.mapView.view(for: annotation)?.annotation = annotation
+//                self.mapView.showAnnotations([CarAnnotation](self.annotations.value), animated: true)
+////
+//                //tricky way to update markers on map.
+//                let center = self.mapView.centerCoordinate
+//                self.mapView.centerCoordinate = center
+//            }
+//        }
         
 //        DispatchQueue.main.async {
 //            self.mapView.showAnnotations([CarAnnotation](self.annotations.value), animated: true)

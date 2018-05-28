@@ -10,13 +10,61 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "TEST/UI/Controllers/GeoDetailsViewController.swift"
-            timestampString = "549122977.31683"
+            timestampString = "549198792.139815"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "162"
-            endingLineNumber = "162"
+            startingLineNumber = "164"
+            endingLineNumber = "164"
             landmarkName = "mapView(_:viewFor:)"
             landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "TEST/UI/Controllers/GeoDetailsViewController.swift"
+            timestampString = "549198792.140339"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "80"
+            endingLineNumber = "80"
+            landmarkName = "updateMarkersOnMap(_:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 () -&gt; () in TEST.GeoDetailsViewController.(updateMarkersOnMap in _B6A808D72D8CEA59C92034894F35A8BB)(Swift.Array&lt;TEST.GeoParams&gt;) -&gt; ()"
+                  moduleName = "TEST"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/dmitrykhotyanovich/Projects/OCSICO/Scope/homework/TEST/UI/Controllers/GeoDetailsViewController.swift"
+                  timestampString = "549197072.89665"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "80"
+                  endingLineNumber = "80"
+                  offsetFromSymbolStart = "608">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (TEST.GeoParams) -&gt; Swift.Optional&lt;TEST.CarAnnotation&gt; in closure #1 () -&gt; () in TEST.GeoDetailsViewController.(updateMarkersOnMap in _B6A808D72D8CEA59C92034894F35A8BB)(Swift.Array&lt;TEST.GeoParams&gt;) -&gt; ()"
+                  moduleName = "TEST"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/dmitrykhotyanovich/Projects/OCSICO/Scope/homework/TEST/UI/Controllers/GeoDetailsViewController.swift"
+                  timestampString = "549197072.898311"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "78"
+                  endingLineNumber = "78"
+                  offsetFromSymbolStart = "20">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
